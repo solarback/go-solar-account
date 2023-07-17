@@ -1,22 +1,19 @@
 package account
 
-type Account struct {
-	UserName string `json:"userName"`
-	Plan     Plan   `json: "Plan"`
-}
+import "account-app/internal/model"
 
-var activeAccounts []Account
+var activeAccounts []model.Account
 
-func getAll() *[]Account {
+func getAll() *[]model.Account {
 
-	activeAccounts = []Account{
-		{UserName: "User1", Plan: Plan{Name: "Standard", Price: 15.5}},
-		{UserName: "User2", Plan: Plan{Name: "Premium", Price: 25.5}},
+	activeAccounts = []model.Account{
+		{UserName: "User1", Plan: model.Plan{Name: "Standard", Price: 15.5}},
+		{UserName: "User2", Plan: model.Plan{Name: "Premium", Price: 25.5}},
 	}
 
 	return &activeAccounts
 }
 
-func addAccount(account *Account) {
+func addAccount(account *model.Account) {
 	activeAccounts = append(activeAccounts, *account)
 }

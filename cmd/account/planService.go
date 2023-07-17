@@ -1,6 +1,11 @@
 package account
 
-type Plan struct {
-	Name  string  `json: "name""`
-	Price float32 `json: "price"`
+import "account-app/internal/model"
+
+func getAvailablePlans(region string) []model.Plan {
+	return nil
+}
+
+func addPlan(region string, price float32) {
+
 }
