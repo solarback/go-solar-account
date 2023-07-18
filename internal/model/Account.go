@@ -1,6 +1,10 @@
 package model
 
+import "time"
+
 type Account struct {
-	UserName string `json:"userName"`
-	Plan     Plan   `json: "Plan"`
+	Id         string    `json:"id"`
+	UserName   string    `json:"userName"`
+	Plan       Plan      `json:"activePlan"`
+	CreateDate time.Time `json:"createDate"`
 }
