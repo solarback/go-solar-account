@@ -1,9 +1,15 @@
 config:
   - environment: dev
     serverPort: 8080
+    jwt:
+      jwt-secret: test-secret
+      jwt-issuer: example.com
+      jwt-audience: example.com
+      cookie-domain: localhost
     database:
       host: 127.0.0.1
       db-user-name: postgres
       db-user-password: postgres
       db-name: accounts_db
       db-port: 5432
+

@@ -2,7 +2,6 @@ package user
 
 import (
 	. "account-app/cmd/domain"
-	"account-app/internal/model/repository"
 	"account-app/internal/model/requests"
 	"github.com/devfeel/mapper"
 	"github.com/google/uuid"
@@ -10,9 +9,9 @@ import (
 )
 
 type userRepo interface {
-	AddUser(newUser repository.User) (repository.User, error)
-	GetById(id uuid.UUID) (repository.User, error)
-	GetAll() ([]repository.User, error)
+	AddUser(newUser User) (User, error)
+	GetById(id uuid.UUID) (User, error)
+	GetAll() ([]User, error)
 }
 
 type Service struct {
@@ -29,18 +28,19 @@ func (service *Service) RegisterNewUser(request requests.RegisterUser) User {
 	var err error
 	newUser := Create(request.UserName, request.Password)
 	newUser.AddEmail(request.Email)
+	newUser.AssignAccount(request.AccountType, "FREE")
 
 	if err != nil {
 		log.Fatalf("Error on fetching plan by name=%s %v", "Free", err)
 	}
 
-	result, err := service.repository.AddUser(toRepo(newUser))
+	result, err := service.repository.AddUser(newUser)
 
 	if err != nil {
 		log.Fatalf("Error on saving new user %v, error=%v", newUser, err)
 	}
 
-	return toDomain(result)
+	return result
 }
 
 func (service *Service) GetAll() []User {
@@ -69,21 +69,5 @@ func (service *Service) GetById(id string) User {
 		log.Fatalf("Error during fetching user by id=%s %v", id, err)
 	}
 
-	return toDomain(result)
-}
-
-func toRepo(from User) (target repository.User) {
-	if err := mapper.Mapper(&from, &target); err != nil {
-		log.Fatalf("Error during user mapping %v", err)
-	}
-
-	return target
-}
-
-func toDomain(from repository.User) (target User) {
-	if err := mapper.Mapper(&from, &target); err != nil {
-		log.Fatalf("Error during user mapping %v", err)
-	}
-
-	return target
+	return result
 }

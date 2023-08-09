@@ -7,7 +7,7 @@ import (
 
 type Account struct {
 	Id                uuid.UUID
-	TypeId            string
+	AccountTypeId     string
 	SubscriptionPlans []SubscriptionPlan
 	CreateDate        time.Time
 }

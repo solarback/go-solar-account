@@ -2,6 +2,7 @@ package handler
 
 import (
 	"account-app/cmd/handler/accountType"
+	"account-app/cmd/handler/auth"
 	"account-app/cmd/handler/plan"
 	"account-app/cmd/handler/user"
 	"account-app/cmd/service"
@@ -17,12 +18,14 @@ type Handlers struct {
 	UserHandler        *user.Handler
 	PlanHandler        *plan.Handler
 	AccountTypeHandler *accountType.Handler
+	AuthHandler        *auth.Handler
 }
 
 func Init(services *service.Services) *Handlers {
 	return &Handlers{
 		UserHandler:        user.Init(services.UserService),
 		AccountTypeHandler: accountType.Init(services.AccountTypeService),
+		AuthHandler:        auth.New(services.SecurityService),
 	}
 }
 
@@ -38,8 +41,11 @@ func (handlers *Handlers) RegisterRoutes(config initializers.EnvironmentConfig) 
 	}),
 	)
 
+	router.POST("/authenticate", handlers.AuthHandler.Login)
+	router.POST("/logout", handlers.AuthHandler.Logout)
+
 	router.GET("/users", handlers.UserHandler.GetAllUsers)
-	router.POST("/addAccount", handlers.UserHandler.RegisterNewUser)
+	router.POST("/registerNewUser", handlers.UserHandler.RegisterNewUser)
 
 	router.GET("/availablePlans", handlers.PlanHandler.GetAvailable)
 
